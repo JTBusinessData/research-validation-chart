@@ -82,6 +82,11 @@
   .db-link{margin:-.55rem 0 1.1rem;font-size:.86rem;}
   .db-link a{color:var(--scarlet);font-weight:600;text-decoration:none;}
   .db-link a:hover{text-decoration:underline;}
+  .db-quicklinks{grid-column:1 / -1;margin:-.5rem 0 .2rem;font-size:.82rem;color:var(--muted);display:flex;flex-wrap:wrap;align-items:center;gap:.45rem;}
+  .db-quicklinks .qk-label{font-weight:600;color:var(--ink);}
+  .db-quicklinks a{color:var(--scarlet);font-weight:600;text-decoration:none;}
+  .db-quicklinks a:hover{text-decoration:underline;}
+  .db-quicklinks .qk-sep{color:var(--line);}
 
   /* ---------- layer / tool pickers ---------- */
   .layer-picker, .tool-picker{display:flex;gap:.55rem;flex-wrap:wrap;margin:1.15rem 0 1.25rem;}
@@ -467,11 +472,18 @@
     }else if(tool.sourceGroup==="rutgers" && rutDb){
       linkHtml = '<p class="db-link"><a href="'+esc(rutDb.url)+'" target="_blank" rel="noopener">Open '+esc(rutDb.name)+' ↗</a></p>';
     }
+    var quickLinksHtml = '<div class="db-quicklinks"><span class="qk-label">Quick links:</span>' +
+      EXTERNAL_TOOLS.map(function(t,i){
+        return (i>0 ? '<span class="qk-sep">·</span>' : '') +
+          '<a href="'+esc(t.url)+'" target="_blank" rel="noopener">'+esc(t.name)+' ↗</a>';
+      }).join("") +
+      '</div>';
     return '<div class="db-picker">' +
         '<div class="db-field"><label class="field-label" for="'+scope+'-db-external">External Research Databases</label>' +
         '<select id="'+scope+'-db-external" class="input-field" data-scope="'+scope+'" data-group="external"><option value="">Select a tool…</option>'+extOpts+'</select></div>' +
         '<div class="db-field"><label class="field-label" for="'+scope+'-db-rutgers">Rutgers Business Databases</label>' +
         '<select id="'+scope+'-db-rutgers" class="input-field" data-scope="'+scope+'" data-group="rutgers"><option value="">Select a database…</option>'+rutOpts+'</select></div>' +
+        quickLinksHtml +
       '</div>' +
       linkHtml +
       '<div class="db-other-row"><label class="field-label" for="'+scope+'-db-other">Other tool or database <span>(not listed above)</span></label>' +
