@@ -430,7 +430,13 @@
   var TOTAL_Q = RUBRIC.reduce(function(s,l){return s+l.questions.length;},0);
   var TOOL_COLORS = ["var(--tool-1)","var(--tool-2)","var(--tool-3)","var(--tool-4)"];
 
-  var EXTERNAL_TOOLS = ["Consensus","Elicit","Scite","AnswerThis","Gemini"];
+  var EXTERNAL_TOOLS = [
+    { name:"Consensus", url:"https://consensus.app/" },
+    { name:"Elicit", url:"https://elicit.com/" },
+    { name:"Scite", url:"https://scite.ai/" },
+    { name:"AnswerThis", url:"https://answerthis.io/" },
+    { name:"Gemini", url:"https://gemini.google.com/" }
+  ];
   var RUTGERS_DBS = [
     { name:"Business Source Premier", url:"https://research.ebsco.com/c/nx7rpm/?db=buh" },
     { name:"Data Axle Reference Solutions", url:"https://login.proxy.libraries.rutgers.edu/login?url=https://www.referenceusa.com/" },
@@ -444,17 +450,23 @@
   ];
 
   function dbPickerHTML(scope, tool){
-    var extOpts = EXTERNAL_TOOLS.map(function(name){
-      var sel = (tool.sourceGroup==="external" && tool.name===name) ? " selected" : "";
-      return '<option'+sel+'>'+esc(name)+'</option>';
+    var extOpts = EXTERNAL_TOOLS.map(function(t){
+      var sel = (tool.sourceGroup==="external" && tool.name===t.name) ? " selected" : "";
+      return '<option value="'+esc(t.name)+'"'+sel+'>'+esc(t.name)+'</option>';
     }).join("");
     var rutOpts = RUTGERS_DBS.map(function(db){
       var sel = (tool.sourceGroup==="rutgers" && tool.name===db.name) ? " selected" : "";
       return '<option value="'+esc(db.name)+'"'+sel+'>'+esc(db.name)+'</option>';
     }).join("");
     var otherVal = tool.sourceGroup==="other" ? esc(tool.name) : "";
-    var db = RUTGERS_DBS.filter(function(d){return d.name===tool.name;})[0];
-    var linkHtml = (tool.sourceGroup==="rutgers" && db) ? '<p class="db-link"><a href="'+esc(db.url)+'" target="_blank" rel="noopener">Open '+esc(db.name)+' ↗</a></p>' : "";
+    var extTool = EXTERNAL_TOOLS.filter(function(t){return t.name===tool.name;})[0];
+    var rutDb = RUTGERS_DBS.filter(function(d){return d.name===tool.name;})[0];
+    var linkHtml = "";
+    if(tool.sourceGroup==="external" && extTool){
+      linkHtml = '<p class="db-link"><a href="'+esc(extTool.url)+'" target="_blank" rel="noopener">Open '+esc(extTool.name)+' ↗</a></p>';
+    }else if(tool.sourceGroup==="rutgers" && rutDb){
+      linkHtml = '<p class="db-link"><a href="'+esc(rutDb.url)+'" target="_blank" rel="noopener">Open '+esc(rutDb.name)+' ↗</a></p>';
+    }
     return '<div class="db-picker">' +
         '<div class="db-field"><label class="field-label" for="'+scope+'-db-external">External Research Databases</label>' +
         '<select id="'+scope+'-db-external" class="input-field" data-scope="'+scope+'" data-group="external"><option value="">Select a tool…</option>'+extOpts+'</select></div>' +
