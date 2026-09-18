@@ -633,7 +633,49 @@
     DISCLOSURE.forEach(function(d){ disclosure[d.id]=""; });
     return { claims:claims, disclosure:disclosure };
   }
-  var chartState = blankChartState();
+  /* Worked example baked in as the page's default — shown to first-time visitors
+     (anyone with no saved answers yet) as a model of a completed chart.
+     Case study: The U.S.–China Trade War (Cavallo et al., 2019), per the syllabus
+     assignment sheet. Clicking "Clear my answers" always resets to a truly blank
+     chart via blankChartState(), never back to this example. */
+  function exampleChartState(){
+    return {
+      claims:{
+        c1:{
+          ai:"U.S. tariffs on Chinese goods largely functioned as intended: Chinese exporters absorbed most of the cost by lowering their pre-tariff prices to stay competitive, so U.S. consumers and firms faced only modest price increases.",
+          db:"Business Source Premier (Cavallo, Gopinath, Neiman & Tang, 2019/2021, American Economic Review: Insights, “Tariff Pass-Through at the Border and at the Store”): Using detailed price and trade data, the authors find tariffs passed through to U.S. import prices at nearly 100% — Chinese export prices barely moved, meaning U.S. importers and consumers, not Chinese exporters, bore almost the entire cost of the tariffs.",
+          outdated:"Yes",
+          justified:"No"
+        },
+        c2:{
+          ai:"The tariffs raised input costs for U.S. manufacturers that rely on Chinese intermediate goods (steel, electronics components), compressing margins and threatening downstream competitiveness.",
+          db:"Dow Jones Factiva (Federal Reserve Bank of NY / Amiti, Redding & Weinstein, 2019) & Business Source Premier: Confirms U.S. firms paid an estimated $3.2 billion per month in added tariff costs by late 2018, concentrated in manufacturing inputs — the risk is well documented and consistent with the AI's claim.",
+          outdated:"No",
+          justified:"Yes"
+        },
+        c3:{
+          ai:"Section 301 tariffs create leverage for the U.S. to pressure China into structural reforms on intellectual property protection and forced technology transfer, formalized through the Phase One trade deal.",
+          db:"Dow Jones Factiva (USTR Phase One Agreement text, Jan 2020) & Business Source Premier: Confirms the Phase One deal included IP and technology-transfer commitments alongside a Chinese pledge to purchase an additional $200B in U.S. goods over two years — the policy mechanism the AI describes is accurately characterized.",
+          outdated:"No",
+          justified:"Yes"
+        },
+        c4:{
+          ai:"Retaliatory Chinese tariffs on U.S. agricultural exports (soybeans, pork) threaten American farmers' access to their largest export market, risking significant revenue losses in the Midwest.",
+          db:"Business Source Premier (USDA Economic Research Service, 2019) & Dow Jones Factiva: Confirms Chinese retaliatory tariffs caused U.S. soybean exports to China to fall by more than 50% in 2018, prompting the federal Market Facilitation Program to pay farmers over $28 billion in trade-war relief through 2019.",
+          outdated:"No",
+          justified:"Yes"
+        }
+      },
+      disclosure:{
+        d1:"Google Gemini (trade-impact summary draft); NotebookLM (grounding on Cavallo et al., 2019 and Federal Reserve / USDA research notes).",
+        d2:"Generate a trade-impact summary of the 2018–2019 U.S.–China tariff escalation under Section 301, focusing on who ultimately bore the cost of the tariffs.",
+        d3:"Uploaded the public Cavallo et al. (2019) AER: Insights article and USDA / Federal Reserve public research notes to NotebookLM as grounding sources. Did not upload paywalled wire-service content, per database licensing rules.",
+        d4:"Business Source Premier and Factiva confirmed Cavallo et al.'s finding that tariffs passed through almost fully to U.S. import prices — directly contradicting the AI's initial claim that Chinese exporters absorbed most of the cost.",
+        d5:"Reframed the Claim 1 conclusion from ‘tariffs worked as intended with minimal cost to U.S. buyers’ to ‘tariffs functioned as a tax paid overwhelmingly by U.S. importers and consumers,’ since the pass-through data show almost no adjustment in Chinese export prices."
+      }
+    };
+  }
+  var chartState = exampleChartState();
   (function loadChartState(){
     try{
       var raw = localStorage.getItem(STORAGE_KEY);
@@ -641,7 +683,7 @@
         var saved = JSON.parse(raw);
         if(saved && saved.claims && saved.disclosure){ chartState = saved; }
       }
-    }catch(e){ /* storage unavailable — start blank */ }
+    }catch(e){ /* storage unavailable — start with the worked example */ }
   })();
   function saveChartState(){
     try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(chartState)); }catch(e){ /* ignore */ }
