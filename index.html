@@ -15,18 +15,8 @@
     --shadow:0 1px 2px rgba(34,31,27,.06), 0 6px 16px rgba(34,31,27,.06);
     color-scheme: light;
   }
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]){
-      --ink:#F1ECE3; --paper:#171310; --card:#211C17; --line:#3A332B; --muted:#B6ACA0;
-      --scarlet:#E8446B; --scarlet-dark:#B8003D;
-      --good:#4FAE79; --good-tint:#173323;
-      --mid:#D9A73B; --mid-tint:#332711;
-      --poor:#E06A6A; --poor-tint:#3A1E1E;
-      --tool-1:#E8446B; --tool-2:#D8D2C8; --tool-3:#D9A73B; --tool-4:#6FA3A3;
-      --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 16px rgba(0,0,0,.35);
-      color-scheme: dark;
-    }
-  }
+  /* Dark mode intentionally disabled — this page always renders in light mode,
+     regardless of the visitor's system/browser dark-mode setting. */
   :root[data-theme="dark"]{
     --ink:#F1ECE3; --paper:#171310; --card:#211C17; --line:#3A332B; --muted:#B6ACA0;
     --scarlet:#E8446B; --scarlet-dark:#B8003D;
